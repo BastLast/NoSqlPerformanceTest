@@ -1,0 +1,24 @@
+{
+  "name": "nosqlperformancetest",
+  "version": "1.0.0",
+  "description": "TP NoSQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BastLast/NoSqlPerformanceTest.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BastLast/NoSqlPerformanceTest/issues"
+  },
+  "homepage": "https://github.com/BastLast/NoSqlPerformanceTest#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "mysql": "^2.18.1"
+  }
+}
