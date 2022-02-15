@@ -10,12 +10,32 @@ connection.connect((err) => {
     console.log('Connected!');
 });
 
+const bodyParser = require('body-parser');
 const express = require('express');
+const path = require('path');
 const app = express();
 const port = 3000;
+app.use(express.static(__dirname + '/'));
+app.use(bodyParser.urlencoded({extend:true}));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.set('views', __dirname);
+
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.redirect('/Base');
+});
+
+app.get('/Base', (req,res) => {
+    res.render('index.html', {mode: 'Not connected'});
+})
+app.post('/SetMode', (req, res) => {
+    if(req.body.mode == 'SGBDR'){
+        res.render('index.html', {mode: 'SGBDR'});
+    }
+    else if(req.body.mode == 'NoSQL') {
+        res.render('index.html', {mode: 'NoSQL'});
+    }
 });
 
 app.listen(port, () => {
