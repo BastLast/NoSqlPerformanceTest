@@ -46,7 +46,8 @@ dire ceux qui se vendent le plus au sein de groupes de followers par opposition 
 achats isolés pour lesquels le groupe social n’a pas d’impact
 - ...
 
-## REMARQUE : si ce sont les performances en recherche/analyse qui sont primordiales pour ce
+### REMARQUE : 
+si ce sont les performances en recherche/analyse qui sont primordiales pour ce
 sujet, les temps d’injection dans les bases sont également des données importantes à
 mesurer et tracer dans le rapport final.
 Travail attendu : un rapport comportant les travaux effectués (modèles de données /
