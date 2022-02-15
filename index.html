@@ -12,7 +12,7 @@
 
 <div class="container">
     <form action="SetMode" method="POST">
-        <input name="mode" type="radio" value="SGBDR" <%if(mode==='SGBDR' || mode==='Not connected'){%><%="checked"%><%}%>>SGBDR</br>
+        <input name="mode" type="radio" value="MySQL" <%if(mode==='MySQL' || mode==='Not connected'){%><%="checked"%><%}%>>MySQL</br>
         <input name="mode" type="radio" value="NoSQL"<%if(mode==='NoSQL'){%>
         <%="checked"%>
         <%}%>>NoSQL</br>
@@ -24,9 +24,20 @@
 </div>
 
 <hr>
-<div class='allRequest'>
+<div class='resultBlock'>
+    <div class="rightPart">
+        <p>Time (s) : <%= time %></p>
+        <div style="overflow:scroll; border:#000000 1px solid;">
+            <%for(let i=0; i<requestResult.length; i++){%>
+            <li><%=JSON.stringify(requestResult[i])%></li>
+            <%}%>
+        </div>
+    </div>
+</div>
+<hr>
+<div class='requestBlock'>
     <div class="leftPart">
-        <p> Select all d'une table</p>
+        <h2> Select all d'une table</h2>
         <form action="RequestSelect" method="POST">
             <input name="table" type="radio" value="Product">Product</br>
             <input name="table" type="radio" value="User">User</br>
@@ -35,13 +46,21 @@
             <input class="submit" type="submit" value="Submit">
         </form>
     </div>
-    <div class="rightPart">
-        <p>Time (s) : <%= time %></p>
-        <div style="overflow:scroll; border:#000000 1px solid;">
-            <%for(let i=0; i<requestResult.length; i++){%>
-            <li><%=JSON.stringify(requestResult[i])%></li>
-            <%}%>
-        </div>
+    <hr>
+    <div class="leftPart">
+        <h2> Liste et nombre de produits commandés par cercle de follower</h2>
+        <form action="ProductListFollowers" method="POST">
+            <input name="userId" type="text" value="userId"></br>
+            <select name="niveau" id="level">
+                <option value="">--Niveau de profondeur--</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <input class="submit" type="submit" value="Submit">
+        </form>
     </div>
 </div>
 <hr>
