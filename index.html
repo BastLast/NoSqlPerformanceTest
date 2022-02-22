@@ -9,7 +9,9 @@
     </style>
 </head>
 <body>
-
+<form action="FillNoSQL" method="POST">
+    <input class="submit" type="submit" value="Fill NoSQL database">
+</form>
 <div class="container">
     <form action="SetMode" method="POST">
         <input name="mode" type="radio" value="MySQL" <%if(mode==='MySQL' || mode==='Not connected'){%><%="checked"%><%}%>>MySQL</br>
