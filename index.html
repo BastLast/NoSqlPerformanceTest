@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Sample Site</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
-        body { padding-top: 50px; }
+        body {
+            padding-top: 50px;
+        }
     </style>
 </head>
 <body>
@@ -55,6 +58,37 @@
             <input name="userId" type="text" value="userId"></br>
             <select name="niveau" id="level">
                 <option value="">--Niveau de profondeur--</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <input class="submit" type="submit" value="Submit">
+        </form>
+    </div>
+    <div class="leftPart">
+        <h2> Liste et nombre de produits commandés par cercle de follower avec selection de produit spécifique</h2>
+        <form action="ProductListFollowersWithSpecificProduct" method="POST">
+            <input name="userId" type="text" value="userId"></br>
+            <input name="productId" type="text" value="productId"></br>
+            <select name="niveau" id="level2">
+                <option value="">--Niveau de profondeur--</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <input class="submit" type="submit" value="Submit">
+        </form>
+    </div>
+    <div class="leftPart">
+        <h2> Nombre de commande par niveaux d'influence</h2>
+        <form action="CommandListByInfluence" method="POST">
+            <input name="productId" type="text" value="productId"></br>
+            <select name="niveau" id="level3">
+                <option value="">--Niveau de profondeur maximal--</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>

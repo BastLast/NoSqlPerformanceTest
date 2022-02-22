@@ -11,7 +11,6 @@ WITH
              JOIN tree ON tree.node = link.idInflu
              JOIN buy ON buy.idUser = link.idInflu
     WHERE depth <= 0 /*à remplacer par la profondeur max à explorer */
-      AND idProduct = 6 /* à remplacer par l'id du produit*/
 )
 SELECT product.id,
        product.ref,
