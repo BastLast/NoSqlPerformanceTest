@@ -86,75 +86,56 @@ app.listen(port, () => {
     console.log(`Application exemple à l'écoute sur le port ${port}!`)
 });
 
-const createNoSQL = async function () {
-    let pre_query = new Date().getTime();
+const createNoSQL = async function(){
     const session = driver.session();
+    const params = {
+    };
     let users = [];
     let products = [];
-    let queryBuilderConstraintProduct = `CREATE CONSTRAINT productConstraint ON (p: Product) ASSERT p.id IS UNIQUE `;
-    const params = {};
+    let queryBuilderConstraintProduct = `CREATE INDEX person_id_index IF NOT EXISTS FOR (p:Person) ON (p.id)`;
+    queryBuilderConstraintProduct = `CREATE CONSTRAINT productConstraint ON (p: Product) ASSERT p.id IS UNIQUE `;
+
     await session.run(queryBuilderConstraintProduct, params);
     let queryBuilderConstraintUser = `CREATE CONSTRAINT userConstraint ON (pers: Person) ASSERT pers.id IS UNIQUE `;
     await session.run(queryBuilderConstraintUser, params);
-    for (let j = 0; j < 10000; j++) {
+    for(let j=0; j<10000; j++){
         let refProd = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 15);
         products.push(refProd);
-        let queryBuilderProduct = `CREATE (p: Product {id: ` + j + `, reference: \"` + refProd + `\"})`;
-        const params = {};
+        let queryBuilderProduct = `CREATE (p: Product {id: ` + j + `, reference: \"`+ refProd + `\"})`;
+        const params = {
+        };
         await session.run(queryBuilderProduct, params);
-        //console.log("nombre de produit inséré : " + j);
     }
     let transaction;
-    let nbrInsert = 4000;
-    let pre_query2 = new Date().getTime();
+    let nbrInsert = 1000000;
     transaction = session.beginTransaction();
-    for (let i = 0; i < nbrInsert; i++) {
-        if (i % 1000 == 0) {
+    for(let i=0; i < nbrInsert; i++){
+        if(i%1000==0){
             await transaction.commit();
             transaction = session.beginTransaction();
-            let post_query2 = new Date().getTime();
-            // calculate the duration in seconds
-            let duration2 = (post_query2 - pre_query2) / 1000;
-            console.log(i + " user inséré en : " + duration2);
-            pre_query2 = new Date().getTime();
         }
         let user = {};
         user.firstName = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 15);
         user.lastName = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 15);
         users.push(user);
         let queryBuilder =
-            `CREATE (p: Person {id: ` + i + `, firstName: \"` + user.firstName + `\" ,lastName: \"` + user.firstName + `\"}) `;
-        //let nbrBuy = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
-        let nbrBuy = 5;
-        let nbrFollower = 20;
-        //let nbrFollower = Math.floor(Math.random() * (20 - 0 + 1)) + 0;
-        for (let h = 0; h < nbrBuy; h++) {
-            let randNumber = Math.floor(Math.random() * (9999 - 0 + 1)) + 0;
-            queryBuilder = queryBuilder + `WITH p as p MATCH (product` + h + `) WHERE product` + h + `.id = ` + randNumber + ` CREATE (p)-[:BUY]->(product` + h + `) `;
-            if (h == nbrBuy - 1 && nbrFollower > 0 && users.length > 20)
-                queryBuilder = queryBuilder + `WITH p as p `;
-        }
-        for (let n = 0; n < nbrFollower; n++) {
-            console.log("n: " + n);
-            if (users.length > 20) {
-                let randNumber2 = Math.floor(Math.random() * (users.length - 0 + 1)) + 0;
-                if (n == (nbrFollower - 1))
-                    queryBuilder = queryBuilder + `MATCH (follower` + n + `) WHERE follower` + n + `.id = ` + randNumber2 + ` CREATE (p)<-[:FOLLOW]-(follower` + n + `) `;
-                else
-                    queryBuilder = queryBuilder + `MATCH (follower` + n + `) WHERE follower` + n + `.id = ` + randNumber2 + ` CREATE (p)<-[:FOLLOW]-(follower` + n + `) WITH follower` + n + ` as follower` + n + `, p as p `;
-            }
-        }
-        const params = {};
-        //console.log(queryBuilder + "\n\n");
-        //return;
-        console.log("debut transac");
+            `CREATE (p: Person {id: ` + i + `, firstName: \"`+ user.firstName + `\" ,lastName: \"`+ user.firstName + `\"}) `;
+        const params = {
+        };
         await transaction.run(queryBuilder, params);
-        console.log("fin transac");
     }
     await transaction.commit();
+    if(users.length > 20){
+        let queryBuilder = `MATCH (f:Person) WITH DISTINCT collect(f) as followers, range(0,20) as followersRange
+            MATCH (i:Person) WITH i, apoc.coll.randomItems(followers, apoc.coll.randomItem(followersRange)) as followers
+            FOREACH (follower in followers | CREATE (follower)-[:FOLLOW]->(i))`
+        await session.run(queryBuilder, params);
+    }
+    if(products.length > 20){
+        let queryBuilder = `MATCH (f:Product) WITH DISTINCT collect(f) as products, range(0,5) as productsRange
+            MATCH (i:Person) WITH i, apoc.coll.randomItems(products, apoc.coll.randomItem(productsRange)) as products
+            FOREACH (product in products | CREATE (product)<-[:BUY]-(i))`
+        await session.run(queryBuilder, params);
+    }
     await session.close();
-    let post_query = new Date().getTime();
-    // calculate the duration in seconds
-    let duration = (post_query - pre_query) / 1000;
-    console.log("FINI EN : " + duration);
 }
