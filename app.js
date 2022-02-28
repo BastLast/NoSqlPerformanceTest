@@ -77,8 +77,8 @@ app.post('/SetMode', (req, res) => {
         res.render('index.html', {mode: 'NoSQL', time: '0', requestResult: ''});
     }
 });
-app.post('/FillNoSQL', (req, res) => {
-    createNoSQL();
+app.post('/FillNoSQL', async(req, res) => {
+    await nosqlManager.createNoSQL();
     res.render('index.html', {mode: 'NoSQL', time: '0', requestResult: ''});
 
 });
@@ -86,56 +86,3 @@ app.listen(port, () => {
     console.log(`Application exemple à l'écoute sur le port ${port}!`)
 });
 
-const createNoSQL = async function(){
-    const session = driver.session();
-    const params = {
-    };
-    let users = [];
-    let products = [];
-    let queryBuilderConstraintProduct = `CREATE INDEX person_id_index IF NOT EXISTS FOR (p:Person) ON (p.id)`;
-    queryBuilderConstraintProduct = `CREATE CONSTRAINT productConstraint ON (p: Product) ASSERT p.id IS UNIQUE `;
-
-    await session.run(queryBuilderConstraintProduct, params);
-    let queryBuilderConstraintUser = `CREATE CONSTRAINT userConstraint ON (pers: Person) ASSERT pers.id IS UNIQUE `;
-    await session.run(queryBuilderConstraintUser, params);
-    for(let j=0; j<10000; j++){
-        let refProd = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 15);
-        products.push(refProd);
-        let queryBuilderProduct = `CREATE (p: Product {id: ` + j + `, reference: \"`+ refProd + `\"})`;
-        const params = {
-        };
-        await session.run(queryBuilderProduct, params);
-    }
-    let transaction;
-    let nbrInsert = 1000000;
-    transaction = session.beginTransaction();
-    for(let i=0; i < nbrInsert; i++){
-        if(i%1000==0){
-            await transaction.commit();
-            transaction = session.beginTransaction();
-        }
-        let user = {};
-        user.firstName = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 15);
-        user.lastName = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 15);
-        users.push(user);
-        let queryBuilder =
-            `CREATE (p: Person {id: ` + i + `, firstName: \"`+ user.firstName + `\" ,lastName: \"`+ user.firstName + `\"}) `;
-        const params = {
-        };
-        await transaction.run(queryBuilder, params);
-    }
-    await transaction.commit();
-    if(users.length > 20){
-        let queryBuilder = `MATCH (f:Person) WITH DISTINCT collect(f) as followers, range(0,20) as followersRange
-            MATCH (i:Person) WITH i, apoc.coll.randomItems(followers, apoc.coll.randomItem(followersRange)) as followers
-            FOREACH (follower in followers | CREATE (follower)-[:FOLLOW]->(i))`
-        await session.run(queryBuilder, params);
-    }
-    if(products.length > 20){
-        let queryBuilder = `MATCH (f:Product) WITH DISTINCT collect(f) as products, range(0,5) as productsRange
-            MATCH (i:Person) WITH i, apoc.coll.randomItems(products, apoc.coll.randomItem(productsRange)) as products
-            FOREACH (product in products | CREATE (product)<-[:BUY]-(i))`
-        await session.run(queryBuilder, params);
-    }
-    await session.close();
-}
