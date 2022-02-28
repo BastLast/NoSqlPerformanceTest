@@ -45,11 +45,10 @@ const createNoSQL = async function(){
     };
     let users = [];
     let products = [];
-    let queryBuilderConstraintProduct = `CREATE INDEX person_id_index IF NOT EXISTS FOR (p:Person) ON (p.id)`;
-    queryBuilderConstraintProduct = `CREATE CONSTRAINT productConstraint ON (p: Product) ASSERT p.idProd IS UNIQUE `;
+    let queryBuilderConstraintProduct = `CREATE INDEX person_id_index IF NOT EXISTS FOR (p:Person) ON (p.idPers)`;
     await session.run(queryBuilderConstraintProduct, params);
-    let queryBuilderConstraintUser = `CREATE CONSTRAINT userConstraint ON (pers: Person) ASSERT pers.idPers IS UNIQUE `;
-    await session.run(queryBuilderConstraintUser, params);
+    queryBuilderConstraintProduct = `CREATE INDEX product_id_index IF NOT EXISTS FOR (p:Product) ON (p.idProd)`;
+    await session.run(queryBuilderConstraintProduct, params);
     let nbrInsertProd = 100;
     for(let j=0; j<nbrInsertProd; j++){
         let prod = {};
