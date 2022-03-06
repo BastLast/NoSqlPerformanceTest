@@ -85,7 +85,7 @@ app.post('/FillNoSQL', async(req, res) => {
 
 app.post('/FillSQL', async(req, res) => {
     await sqlManager.createSQL();
-    res.render('index.html', {mode: 'NoSQL', time: '0', requestResult: ''});
+    res.render('index.html', {mode: 'MySQL', time: '0', requestResult: 'Veuillez executer les procédures enregistrées dans le fichier insert.sql pour remplir la base sql.'});
 });
 
 app.listen(port, () => {

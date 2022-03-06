@@ -3,7 +3,7 @@ const mysql = require("mysql");
 const connectionMYSQL = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: 'root',
     database: 'tpbdd'
 });
 
@@ -14,7 +14,7 @@ connectionMYSQL.connect((err) => {
 });
 
 const createSQL = async function () {
-
+   return;
 }
 
 const requestMySQL = async function (query, res) {
@@ -33,6 +33,6 @@ const requestMySQL = async function (query, res) {
 }
 
 module.exports = {
-    createSQL : createSQL(),
+    createSQL : createSQL,
     requestMySQL: requestMySQL
 }
