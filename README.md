@@ -1,7 +1,18 @@
 # NoSqlPerformanceTest
 TP NoSQL
 
-## Objectif :
+##Mise en place de notre application :
+
+Mettre en place un serveur mysql 8
+Créer une base de données à l'aide du script de création de base inclus
+initier une base de données neo4j
+indiquer les informations de connexion dans les managers
+lancer la commande `npm install`
+lancer l'application à l'aide de la commande `node app.js`
+
+##Rappel du sujet
+
+### Objectif :
 
 Modéliser, implémenter et tester en volumétrie un service d’analyse de comportement
 d’achat d’utilisateurs regroupés dans un réseau social. Cette implémentation et ces tests
@@ -11,7 +22,7 @@ Les tests devront pouvoir être effectués par un utilisateur sans intervention 
 donc il faut également développer un logiciel (Web ou client lourd au choix) permettant de
 lancer des requêtes sur les 2 bases avec mesure/affichage des temps de réponse.
 
-## Cahier des charges :
+### Cahier des charges :
 
 Les utilisateurs sont regroupés au sein d’un réseau social leur permettant d’avoir des cercles
 de followers. Le lien de « follows » devra être orienté. En termes de volumétrie pour cette
@@ -23,7 +34,7 @@ Concernant les achats, la base pourrait contenir 10 000 références de produits
 achats, chaque utilisateur pourrait avoir commandé entre 0 et 5 produits parmi ces
 références.
 
-## Méthodologie :
+### Méthodologie :
 
 L’alimentation des données se fera par des processus automatisés de génération aléatoire :
 il ne sera donc pas question ici de juger de la pertinence des résultats obtenus aux requêtes
@@ -46,7 +57,7 @@ dire ceux qui se vendent le plus au sein de groupes de followers par opposition 
 achats isolés pour lesquels le groupe social n’a pas d’impact
 - ...
 
-### REMARQUE : 
+#### REMARQUE : 
 si ce sont les performances en recherche/analyse qui sont primordiales pour ce
 sujet, les temps d’injection dans les bases sont également des données importantes à
 mesurer et tracer dans le rapport final.
