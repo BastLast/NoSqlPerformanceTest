@@ -77,11 +77,17 @@ app.post('/SetMode', (req, res) => {
         res.render('index.html', {mode: 'NoSQL', time: '0', requestResult: ''});
     }
 });
+
 app.post('/FillNoSQL', async(req, res) => {
     await nosqlManager.createNoSQL();
     res.render('index.html', {mode: 'NoSQL', time: '0', requestResult: ''});
-
 });
+
+app.post('/FillSQL', async(req, res) => {
+    await sqlManager.createSQL();
+    res.render('index.html', {mode: 'NoSQL', time: '0', requestResult: ''});
+});
+
 app.listen(port, () => {
     console.log(`Application exemple à l'écoute sur le port ${port}!`)
 });

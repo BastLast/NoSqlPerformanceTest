@@ -13,6 +13,10 @@ connectionMYSQL.connect((err) => {
     }
 });
 
+const createSQL = async function () {
+
+}
+
 const requestMySQL = async function (query, res) {
     let pre_query = new Date().getTime();
     await connectionMYSQL.query(query, function (err, result, fields) {
@@ -29,5 +33,6 @@ const requestMySQL = async function (query, res) {
 }
 
 module.exports = {
+    createSQL : createSQL(),
     requestMySQL: requestMySQL
 }
